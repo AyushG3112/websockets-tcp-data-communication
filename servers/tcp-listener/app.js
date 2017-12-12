@@ -3,16 +3,28 @@ var http = require('http')
 
 const commonConfig = require('../config.common')
 
+let dataObj = {}
+
+const indexArrayByField = (array, fieldName) => {
+	let obj = {};
+	for(let i = 0; i < array.length; i++) {
+		obj[array[i][fieldName]] = array[i]
+	}
+	return obj;
+}
+
 var client = new net.Socket();
-client.connect(commonConfig.TCP_PORT, commonConfig.TCP_ADDR, function() {
+client.connect(commonConfig.TCP_PORT, commonConfig.TCP_ADDR, () => {
 	console.log('Connected');
-	client.write('Hello, server! Love, Client.');
 });
 
-client.on('data', function(data) {
-	console.log('Received: ' + data);
+client.on('data', (data) => {
+	let indexedData = indexArrayByField(JSON.parse(data), 'currencyPair');
+	Object.getOwnPropertyNames(indexedData).forEach((currencyPair) => {
+		dataObj[currencyPair] = indexedData[currencyPair];
+	})
 });
 
-client.on('close', function() {
+client.on('close', () => {
 	console.log('Connection closed');
 });
