@@ -1,9 +1,9 @@
 var eventEmitter = new (require('events')).EventEmitter();
-const commonConfig = require('../config.common');
 const TCPListener = require('./lib/tcpListener');
 const WebsocketWriter = require('./lib/websocketWriter');
 const config = require('./config');
-const tcpListener = new TCPListener(commonConfig.TCP_PORT, commonConfig.TCP_ADDR);
+
+const tcpListener = new TCPListener(config.TCP_PORT, config.TCP_ADDR);
 tcpListener.setEventEmitter(eventEmitter);
 tcpListener.start();
 

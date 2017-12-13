@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import io from 'socket.io-client';
+import { environment } from '../environments/environment.prod';
 
 @Component({
   selector: 'app-root',
@@ -15,14 +16,12 @@ export class AppComponent {
   }
 
   ngOnInit() {
-    this.socket = io('http://localhost:3000');
+    this.socket = io(environment.socketUri);
     this.socket.on('connect', function() {
       console.log('connected');
     });
 
-    this.socket.on('broadcast', data => {
-      this.latestData = data;
-    });
+    this.socket.on('broadcast', (data) => this.handleData(data));
   }
 
   getTableClass(trend) {
@@ -35,5 +34,9 @@ export class AppComponent {
       default:
         return 'default';
     }
+  }
+
+  handleData(data) {
+    this.latestData = data;
   }
 }

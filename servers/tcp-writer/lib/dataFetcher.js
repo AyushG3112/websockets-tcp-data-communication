@@ -1,5 +1,4 @@
 var http = require('http');
-const commonConfig = require('../../config.common');
 const config = require('../config');
 const DataProcessor = require('./dataProcessor');
 
