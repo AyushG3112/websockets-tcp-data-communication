@@ -1,7 +1,8 @@
 var net = require('net');
 var http = require('http');
-
+var eventEmitter = new (require('events')).EventEmitter();
 const commonConfig = require('../config.common');
+const io = require('socket.io')();
 
 let dataObj = {};
 
@@ -23,9 +24,17 @@ client.on('data', data => {
   Object.getOwnPropertyNames(indexedData).forEach(currencyPair => {
     dataObj[currencyPair] = indexedData[currencyPair];
   });
-  console.log(indexedData);
+  eventEmitter.emit('dataChanged', Object.getOwnPropertyNames(dataObj).map(x => dataObj[x]));
 });
 
 client.on('close', () => {
   console.log('Connection closed');
 });
+
+io.on('connection', function(client) {
+  eventEmitter.on('dataChanged', data => {
+    io.emit('broadcast', data);
+  });
+  io.on('broadcast', console.log);
+});
+io.listen(3000);
