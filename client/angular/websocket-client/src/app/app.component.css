@@ -6,3 +6,7 @@ td.inc {
   background-color: #32dd32;
   color: #000;
 }
+td.default {
+  background-color: #eeeeee;
+  color: #000;
+}

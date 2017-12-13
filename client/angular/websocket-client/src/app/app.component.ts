@@ -9,8 +9,9 @@ import io from 'socket.io-client';
 export class AppComponent {
   title = 'app';
   socket: any;
-  latestData: any;
+  latestData: any[];
   constructor() {
+    this.latestData = [];
     this.socket = io('http://localhost:3000');
     this.socket.on('connect', function() {
       console.log('connected');
@@ -27,8 +28,9 @@ export class AppComponent {
         return 'inc';
       case 'DEC':
         return 'dec';
-      case 'SAME':
-        return 'same';
+
+      default:
+        return 'default';
     }
   }
 }
