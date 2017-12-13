@@ -12,6 +12,9 @@ export class AppComponent {
   latestData: any[];
   constructor() {
     this.latestData = [];
+  }
+
+  ngOnInit() {
     this.socket = io('http://localhost:3000');
     this.socket.on('connect', function() {
       console.log('connected');
