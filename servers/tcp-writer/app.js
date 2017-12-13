@@ -3,9 +3,10 @@ var http = require('http');
 const commonConfig = require('../config.common');
 const config = require('./config');
 const DataFetcher = require('./lib/dataFetcher');
-let previousData = [];
+
 let activeConnectionsCount = 0;
 let totalConnectionsCount = 0;
+
 var server = net.createServer(function(socket) {
   activeConnectionsCount += 1;
   totalConnectionsCount += 1;
