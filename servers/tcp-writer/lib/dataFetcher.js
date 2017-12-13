@@ -1,9 +1,12 @@
 var http = require('http');
 const commonConfig = require('../../config.common');
 const config = require('../config');
-const dataProcessor = require('./dataProcessor');
+const DataProcessor = require('./dataProcessor');
 
 class DataFetcher {
+  constructor() {
+    this._dataProcessor = new DataProcessor();
+  }
   getDataFromSource() {
     return new Promise((resolve, reject) => {
       http
@@ -19,12 +22,12 @@ class DataFetcher {
 
   getProcessedData() {
     return this.getDataFromSource().then(data => {
-      let processedData = dataProcessor.processData(data);
-      let changedData = dataProcessor.getChangedDataWithTrends(processedData);
-      dataProcessor.setPreviousData(processedData);
+      let processedData = this._dataProcessor.processData(data);
+      let changedData = this._dataProcessor.getChangedDataWithTrends(processedData);
+      this._dataProcessor.setPreviousData(processedData);
       return changedData;
     });
   }
 }
 
-module.exports = new DataFetcher();
+module.exports = DataFetcher;

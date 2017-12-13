@@ -79,4 +79,4 @@ class DataProcessor {
   }
 }
 
-module.exports = new DataProcessor();
+module.exports = DataProcessor;

@@ -2,28 +2,32 @@ var net = require('net');
 var http = require('http');
 const commonConfig = require('../config.common');
 const config = require('./config');
-const dataFetcher = require('./lib/dataFetcher');
-let cycle = 0;
+const DataFetcher = require('./lib/dataFetcher');
 let previousData = [];
-
+let activeConnectionsCount = 0;
+let totalConnectionsCount = 0;
 var server = net.createServer(function(socket) {
+  activeConnectionsCount += 1;
+  totalConnectionsCount += 1;
+  let connectionNumber = totalConnectionsCount;
+  console.info('Connection ' + connectionNumber + ' Opened');
+  const dataFetcher = new DataFetcher();
   let socketClosed = false;
   socket.on('close', () => {
-    console.info('Socket Closed');
+    activeConnectionsCount--;
+    console.info('Connection ' + connectionNumber + ' Closed');
     socketClosed = true;
   });
+
   let writer = () => {
-    cycle += 1;
     return dataFetcher
       .getProcessedData()
       .then(changedData => {
         if (changedData.length && !socketClosed) {
           socket.write(JSON.stringify(changedData));
-        } else {
-          console.info('Skiping Cycle ' + cycle);
         }
       })
-      .catch(console.log)
+      .catch(console.error)
       .then(() => {
         if (!socketClosed) {
           setTimeout(writer, config.refreshTimeMs);
