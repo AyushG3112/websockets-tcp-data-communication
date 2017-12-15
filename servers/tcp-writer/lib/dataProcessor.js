@@ -17,8 +17,8 @@ class DataProcessor {
         timestamp: new Date(parseInt(values[1])),
         bidPrice: Number(values[2] + values[3]),
         offerPrice: Number(values[4] + values[5]),
-        high: Number(values[6]),
-        low: Number(values[7]),
+        high: Number(values[7]),
+        low: Number(values[6]),
         open: Number(values[8])
       };
     });
